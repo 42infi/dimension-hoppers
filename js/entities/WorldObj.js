@@ -1,22 +1,28 @@
 import {Vector3} from "three";
 
-export class WorldObj {
+export default class WorldObj {
 
     constructor(position = new Vector3(0, 0, 0), rotation = new Vector3(0, 0, 0)) {
-        this.postion = position;
+        this.position = position;
         this.rotation = rotation;
-
-        addEventListener('update', this.update);
+        this.model = null;
+        addEventListener('update', this.updateEvent);
 
     }
 
 
-    update = (e) => {
-        console.log("update ev", e.detail);
+    updateEvent = e => this.update(e.detail);
+
+    update(detail) {
+        if (this.model != null) {
+            this.model.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
+            this.model.position.set(this.position.x, this.position.y, this.position.z);
+        }
     }
 
     destructor = () => {
-        removeEventListener('update', this.update);
+        removeEventListener('update', this.updateEvent);
     }
+
 
 }

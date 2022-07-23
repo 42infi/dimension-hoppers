@@ -2,7 +2,7 @@
   "name": "border-runner",
   "version": "1.0.0",
   "description": "",
-  "main": "js/main.js",
+  "main": "js/Main.js",
   "scripts": {
     "start": "snowpack dev",
     "test": "echo \"Error: no test specified\" && exit 1"
