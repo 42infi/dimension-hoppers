@@ -1,17 +1,17 @@
-import { Euler, EventDispatcher, Vector3 } from 'three'
+import {Euler, EventDispatcher, Vector3} from 'three'
 
 const _euler = new Euler(0, 0, 0, 'YXZ');
 const _vector = new Vector3();
 
-const _changeEvent = { type: 'change' };
-const _lockEvent = { type: 'lock' };
-const _unlockEvent = { type: 'unlock' };
+const _changeEvent = {type: 'change'};
+const _lockEvent = {type: 'lock'};
+const _unlockEvent = {type: 'unlock'};
 
 const _PI_2 = Math.PI / 2;
 
 class PointerLockControls extends EventDispatcher {
 
-    constructor(camera, domElement) {
+    constructor(player, camera, domElement) {
 
         super();
 
@@ -104,15 +104,7 @@ class PointerLockControls extends EventDispatcher {
 
 
         this.getDirection = function () {
-
-            const direction = new Vector3(0, 0, - 1);
-
-            var cpy = direction;
-
-            return cpy.applyQuaternion(camera.quaternion);
-
-
-
+            return new Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
         };
 
 
@@ -120,7 +112,7 @@ class PointerLockControls extends EventDispatcher {
             return _euler;
         };
 
-        this.moveForward = function (distance) {
+        this.moveForward = function (distance, collisions) {
 
             // move forward parallel to the xz-plane
             // assumes camera.up is y-up
@@ -129,17 +121,42 @@ class PointerLockControls extends EventDispatcher {
 
             _vector.crossVectors(camera.up, _vector);
 
-            camera.position.addScaledVector(_vector, distance);
+            camera.position.add(this.scaledCollision(_vector, distance, collisions));
 
         };
 
-        this.moveRight = function (distance) {
+        this.moveRight = function (distance, collisions) {
 
             _vector.setFromMatrixColumn(camera.matrix, 0);
 
-            camera.position.addScaledVector(_vector, distance);
+            camera.position.add(this.scaledCollision(_vector, distance, collisions));
 
         };
+
+        //TODO: reset velocity on collide without breaking smth
+        this.scaledCollision = (_vector, distance, collisions) => {
+            let sv = new Vector3().addScaledVector(_vector, distance);
+
+            if (collisions.x > 0 && sv.x > 0) {
+                sv.x = 0;
+                // player.velocity.x = 0;
+            }
+            if (collisions.x < 0 && sv.x < 0) {
+                sv.x = 0;
+                // player.velocity.x = 0;
+            }
+
+            if (collisions.z > 0 && sv.z > 0) {
+                sv.z = 0;
+                // player.velocity.z = 0;
+            }
+            if (collisions.z < 0 && sv.z < 0) {
+                sv.z = 0;
+                // player.velocity.z = 0;
+            }
+
+            return sv;
+        }
 
         this.lock = function () {
 
@@ -159,4 +176,6 @@ class PointerLockControls extends EventDispatcher {
 
 }
 
-export { PointerLockControls };
+export {
+    PointerLockControls
+};

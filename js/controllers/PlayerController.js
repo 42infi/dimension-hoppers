@@ -1,14 +1,20 @@
-import {Vector3} from "three";
 import {PointerLockControls} from "./PointerLockControls";
 
 export default class PlayerController {
 
-    constructor(player, canvas) {
+    constructor(player, camera, canvas) {
 
         this.forward = false;
         this.backward = false;
         this.left = false;
         this.right = false;
+
+
+        this.mouseControls = new PointerLockControls(player, camera, canvas);
+
+        canvas.onclick = () => {
+            canvas.requestPointerLock();
+        }
 
 
         window.addEventListener('keydown', ev => {
@@ -47,20 +53,12 @@ export default class PlayerController {
 
         });
 
-    }
+        window.addEventListener('keypress', ev => {
+            if (ev.key === ' ') {
+                player.jump();
+            }
+        })
 
-    inIdle = () => {
-        return !this.forward && !this.backward && !this.left && !this.right;
-    }
-
-    static getMoveDir = (yaw) => {
-
-        yaw -= Math.PI/2;
-
-        let dX = -Math.cos(yaw);
-        let dZ = Math.sin(yaw);
-
-        return new Vector3(dX, 0, dZ);
     }
 
 

@@ -1,9 +1,9 @@
 import {
     AmbientLight,
-    BoxGeometry, CameraHelper,
+    BoxGeometry,
     Color, DirectionalLight,
     Mesh,
-    MeshBasicMaterial, MeshLambertMaterial, PCFSoftShadowMap,
+    MeshLambertMaterial, PCFSoftShadowMap,
     PerspectiveCamera,
     Scene,
     sRGBEncoding,
@@ -64,18 +64,27 @@ export default function initWorld() {
     scene.add(ambientLight)
 
 
-    const plane = new Mesh(new BoxGeometry(50, 0.1, 50), new MeshLambertMaterial({ color: '#5b5b5b' }));
+    const plane = new Mesh(new BoxGeometry(50, 0.1, 50), new MeshLambertMaterial({color: '#5b5b5b'}));
+    plane.name = "plane"
     plane.castShadow = true;
     plane.receiveShadow = true;
     scene.add(plane);
 
 
-    const wall = new Mesh(new BoxGeometry(5, 10, 10), new MeshLambertMaterial({ color: 0xffff55 }));
+    const wall = new Mesh(new BoxGeometry(5, 10, 10), new MeshLambertMaterial({color: 0xffff55}));
     wall.name = "wall";
     wall.castShadow = true;
     wall.receiveShadow = true;
     wall.position.x = -10;
     scene.add(wall);
+
+    const wall2 = new Mesh(new BoxGeometry(5, 0.5, 10), new MeshLambertMaterial({color: 0xffff55}));
+    wall2.name = "wall";
+    wall2.castShadow = true;
+    wall2.receiveShadow = true;
+    wall2.position.x = 10;
+    wall2.position.y = 3;
+    scene.add(wall2);
 
 
     loaded = true;
