@@ -20,12 +20,12 @@ export default class Player extends Entity {
         this.playerController = new PlayerController(this, camera, canvas);
         this.stopped = false;
 
-        this.collider = new Mesh(new CylinderGeometry(1, 1, 2, 8, 1), new MeshLambertMaterial({color: 0xffff55}));
+        /*this.collider = new Mesh(new CylinderGeometry(1, 1, 2, 8, 1), new MeshLambertMaterial({color: 0xffff55}));
         this.collider.name = 'collider';
         this.collider.castShadow = true;
         this.collider.receiveShadow = true;
 
-        scene.add(this.collider);
+        scene.add(this.collider);*/
 
     }
 
@@ -37,15 +37,10 @@ export default class Player extends Entity {
 
         const groundRaycaster = new Raycaster();
         groundRaycaster.set(this.camera.position, new Vector3(0, -1, 0));
-        groundRaycaster.far = 4.5;
-        groundRaycaster.near = 4;
+        groundRaycaster.far = 4;
         const intersects = groundRaycaster.intersectObjects(this.scene.children);
 
-        if (intersects[0] && intersects[0].object.name === 'collider') {
-            this.onGround = !!intersects[1];
-        } else {
-            this.onGround = !!intersects[0];
-        }
+        this.onGround = !!intersects[0];
 
         let colVec = new Vector3();
 
@@ -57,9 +52,9 @@ export default class Player extends Entity {
 
             let box = new Box3().setFromObject(curObj);
 
-            let xc = Math.max(this.collider.position.x, Math.min(box.max.x, this.collider.position.x));
-            let yc = Math.max(this.collider.position.y, Math.min(box.max.y, this.collider.position.y + 4))
-            let zc = Math.max(this.collider.position.z, Math.min(box.max.z, this.collider.position.z))
+            let xc = Math.max(this.camera.position.x, Math.min(box.max.x, this.camera.position.x));
+            let yc = Math.max(this.camera.position.y - 4, Math.min(box.max.y, this.camera.position.y))
+            let zc = Math.max(this.camera.position.z, Math.min(box.max.z, this.camera.position.z))
 
             let x = Math.max(box.min.x, Math.min(xc, box.max.x));
             let y = Math.max(box.min.y, Math.min(yc, box.max.y));
@@ -71,64 +66,64 @@ export default class Player extends Entity {
 
             let distance = Math.sqrt(Math.pow(relX, 2) + Math.pow(relY, 2) + Math.pow(relZ, 2));
 
-            if (distance < 0.7) {
+            if (distance < 0.3) {
                 colVec = new Vector3(Math.sign(relX), Math.sign(relY), Math.sign(relZ))
             }
 
         }
 
+        console.log(this.camera.position.y)
+
+        const speed = 300;
+        const maxSpeed = 12;
+        const slowdown = 100;
 
         if (this.playerController.forward) {
-            if (this.velocity.x < 12) {
-                this.velocity.x += 12 * delta;
+            if (this.velocity.x < maxSpeed) {
+                this.velocity.x += speed * delta;
             }
         }
 
         if (this.playerController.backward) {
-            if (this.velocity.x > -12) {
-                this.velocity.x -= 12 * delta;
+            if (this.velocity.x > -maxSpeed) {
+                this.velocity.x -= speed * delta;
             }
         }
 
         if (this.playerController.right) {
-            if (this.velocity.z < 12) {
-                this.velocity.z += 12 * delta;
+            if (this.velocity.z < maxSpeed) {
+                this.velocity.z += speed * delta;
             }
         }
 
         if (this.playerController.left) {
-            if (this.velocity.z > -12) {
-                this.velocity.z -= 12 * delta;
+            if (this.velocity.z > -maxSpeed) {
+                this.velocity.z -= speed * delta;
             }
         }
 
-        if (!this.playerController.forward && !this.playerController.backward) {
 
-            if (this.velocity.x < 0) {
-                this.velocity.x += 9 * delta;
-                if (this.velocity.x > 0) this.velocity.x = 0;
-            }
-
-            if (this.velocity.x > 0) {
-                this.velocity.x -= 9 * delta;
-                if (this.velocity.x < 0) this.velocity.x = 0;
-            }
-
+        if (this.velocity.x < 0) {
+            this.velocity.x += slowdown * delta;
+            if (this.velocity.x > 0) this.velocity.x = 0;
         }
 
-        if (!this.playerController.left && !this.playerController.right) {
-
-            if (this.velocity.z < 0) {
-                this.velocity.z += 9 * delta;
-                if (this.velocity.z > 0) this.velocity.z = 0;
-            }
-
-            if (this.velocity.z > 0) {
-                this.velocity.z -= 9 * delta;
-                if (this.velocity.z < 0) this.velocity.z = 0;
-            }
-
+        if (this.velocity.x > 0) {
+            this.velocity.x -= slowdown * delta;
+            if (this.velocity.x < 0) this.velocity.x = 0;
         }
+
+
+        if (this.velocity.z < 0) {
+            this.velocity.z += slowdown * delta;
+            if (this.velocity.z > 0) this.velocity.z = 0;
+        }
+
+        if (this.velocity.z > 0) {
+            this.velocity.z -= slowdown * delta;
+            if (this.velocity.z < 0) this.velocity.z = 0;
+        }
+
 
         this.playerController.mouseControls.moveForward(this.velocity.x * delta, colVec);
         this.playerController.mouseControls.moveRight(this.velocity.z * delta, colVec);
@@ -153,13 +148,11 @@ export default class Player extends Entity {
 
         this.camera.position.y += this.velocity.y * delta;
 
-        this.collider.position.set(this.camera.position.x, this.camera.position.y - 4, this.camera.position.z);
-
 
     }
 
     jump = () => {
-        if (this.onGround) this.velocity.y += 30;
+        if (this.onGround) this.velocity.y += 25
     }
 
 }

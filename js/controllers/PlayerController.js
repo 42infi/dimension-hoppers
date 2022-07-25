@@ -31,6 +31,9 @@ export default class PlayerController {
                     break;
                 case 'd':
                     this.right = true;
+                    break;
+                case ' ':
+                    player.jump();
             }
 
         });
@@ -53,11 +56,6 @@ export default class PlayerController {
 
         });
 
-        window.addEventListener('keypress', ev => {
-            if (ev.key === ' ') {
-                player.jump();
-            }
-        })
 
     }
 

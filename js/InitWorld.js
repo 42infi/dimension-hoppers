@@ -78,12 +78,12 @@ export default function initWorld() {
     wall.position.x = -10;
     scene.add(wall);
 
-    const wall2 = new Mesh(new BoxGeometry(5, 0.5, 10), new MeshLambertMaterial({color: 0xffff55}));
+    const wall2 = new Mesh(new BoxGeometry(5, 5, 10), new MeshLambertMaterial({color: 0xffff55}));
     wall2.name = "wall";
     wall2.castShadow = true;
     wall2.receiveShadow = true;
     wall2.position.x = 10;
-    wall2.position.y = 3;
+    wall2.position.y = 0;
     scene.add(wall2);
 
 
