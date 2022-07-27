@@ -1,6 +1,6 @@
 import Entity from "./Entity";
 import {
-    Box3,
+    Box3, Color,
     CylinderGeometry,
     Mesh,
     MeshLambertMaterial,
@@ -12,8 +12,10 @@ import PlayerController from "../controllers/PlayerController";
 
 export default class Player extends Entity {
 
-    constructor(scene, camera, canvas) {
+    constructor(dim1, dim2, scene, camera, canvas) {
         super();
+        this.dim1 = dim1;
+        this.dim2 = dim2;
         this.scene = scene;
         this.camera = camera;
         this.velocity = new Vector3();
@@ -26,7 +28,7 @@ export default class Player extends Entity {
         this.collider.receiveShadow = true;
 
         scene.add(this.collider);*/
-
+        this.lastPos = 0;
     }
 
     update(detail) {
@@ -35,22 +37,38 @@ export default class Player extends Entity {
 
         const delta = detail.delta;
 
+        this.dim1.traverse((e) => {
+            if (e !== this.dim1) {
+                e.material.wireframe = this.playerController.curDim !== 1;
+                e.castShadow = !e.material.wireframe;
+            }
+        });
+
+        this.dim2.traverse((e) => {
+            if (e !== this.dim2) {
+                e.material.wireframe = this.playerController.curDim !== 2;
+                e.castShadow = !e.material.wireframe;
+            }
+        });
+
+        this.scene.background = this.playerController.curDim === 1 ? new Color('#ff1454') : new Color('#ff9914');
+
         const groundRaycaster = new Raycaster();
         groundRaycaster.set(this.camera.position, new Vector3(0, -1, 0));
         groundRaycaster.far = 4;
-        const intersects = groundRaycaster.intersectObjects(this.scene.children);
+        const intersects = groundRaycaster.intersectObjects(this[`dim${this.playerController.curDim}`].children);
 
         this.onGround = !!intersects[0];
 
         let colVec = new Vector3();
 
-        for (let i = 0; i < this.scene.children.length; i++) {
+        for (let i = 0; i < this[`dim${this.playerController.curDim}`].children.length; i++) {
 
-            const curObj = this.scene.children[i];
+            const curObj = this[`dim${this.playerController.curDim}`].children[i];
 
             if (curObj.name === 'collider' || curObj.name === 'plane') continue;
 
-            let box = new Box3().setFromObject(curObj);
+            let box = new Box3().setFromObject(curObj, true);
 
             let xc = Math.max(this.camera.position.x, Math.min(box.max.x, this.camera.position.x));
             let yc = Math.max(this.camera.position.y - 4, Math.min(box.max.y, this.camera.position.y))
@@ -71,8 +89,6 @@ export default class Player extends Entity {
             }
 
         }
-
-        console.log(this.camera.position.y)
 
         const speed = 300;
         const maxSpeed = 12;
@@ -147,6 +163,8 @@ export default class Player extends Entity {
         }
 
         this.camera.position.y += this.velocity.y * delta;
+
+        this.lastPos = this.camera.position.clone();
 
 
     }

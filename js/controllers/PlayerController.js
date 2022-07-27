@@ -9,6 +9,7 @@ export default class PlayerController {
         this.left = false;
         this.right = false;
 
+        this.curDim = 1;
 
         this.mouseControls = new PointerLockControls(player, camera, canvas);
 
@@ -31,9 +32,6 @@ export default class PlayerController {
                     break;
                 case 'd':
                     this.right = true;
-                    break;
-                case ' ':
-                    player.jump();
             }
 
         });
@@ -55,6 +53,19 @@ export default class PlayerController {
             }
 
         });
+
+        window.addEventListener('keypress', ev => {
+            switch (ev.key) {
+                case ' ':
+                    player.jump();
+                    break;
+                case '1':
+                    this.curDim = 1;
+                    break;
+                case '2':
+                    this.curDim = 2;
+            }
+        })
 
 
     }
