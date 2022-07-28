@@ -59,10 +59,10 @@ export default class PlayerController {
                 case ' ':
                     player.jump();
                     break;
-                case '1':
+                case 'q':
                     this.curDim = 1;
                     break;
-                case '2':
+                case 'e':
                     this.curDim = 2;
             }
         })

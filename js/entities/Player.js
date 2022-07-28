@@ -85,13 +85,13 @@ export default class Player extends Entity {
             let distance = Math.sqrt(Math.pow(relX, 2) + Math.pow(relY, 2) + Math.pow(relZ, 2));
 
             if (distance < 0.3) {
-                colVec = new Vector3(Math.sign(relX), Math.sign(relY), Math.sign(relZ))
+                colVec.add(new Vector3(Math.sign(relX), Math.sign(relY), Math.sign(relZ)));
             }
 
         }
 
         const speed = 300;
-        const maxSpeed = 12;
+        const maxSpeed = 14;
         const slowdown = 100;
 
         if (this.playerController.forward) {
