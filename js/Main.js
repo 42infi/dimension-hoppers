@@ -23,7 +23,7 @@ function animate() {
 
     dispatchEvent(new CustomEvent('update', {detail: {delta: delta}}));
 
-    state.weapon.rotation.x = (localPlayer.velocity.x) / 1000;
+    state.weapon.rotation.x = localPlayer.velocity.x / 1000;
     state.weapon.position.x = 3 + (-(localPlayer.velocity.z) / 200);
 
     renderer.autoClear = true;
