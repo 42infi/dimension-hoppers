@@ -1,15 +1,19 @@
 import initWorld from "./InitWorld";
-import Player from "./entities/Player";
+import LocalPlayer from "./entities/LocalPlayer";
 import {WEBGL} from "./WEBGL";
+import Player from "./entities/Player";
+import {MOUSE} from "three";
 
 
 const [canvas, scene, camera, renderer, group1, group2, directionalLight, overlayCamera, overlayScene, state] = initWorld();
 
 let lastTime = Date.now();
 
-const localPlayer = new Player(group1, group2, scene, camera, canvas);
+const localPlayer = new LocalPlayer(group1, group2, scene, camera, canvas);
 camera.position.y += 10;
 
+
+let player = new Player(scene);
 
 function animate() {
 

@@ -12,8 +12,4 @@ export default class Entity extends WorldObj {
         return this.health > 0;
     }
 
-    isVisible = () => {
-        return true;
-    }
-
 }

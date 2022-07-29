@@ -1,11 +1,78 @@
 body {
     margin: 0;
     padding: 0;
-    overflow-y: hidden;
+    overflow: hidden;
+    font-family: Calibri, sans-serif;
+
+}
+
+#backgroundimg{
+    height: 110%;
+    filter: blur(3px);
+    margin: -10px;
+    overflow-x: hidden;
+
 }
 
 #crosshair{
     position: absolute;
     left: 50%;
     top: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+}
+
+#menuholder{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 400px;
+    background: red;
+}
+
+.heading{
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 80px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 5px 5px black;
+}
+
+.shift{
+    transform: translateY(80px);
+}
+
+#linkwrapper{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+input{
+    width: 300px;
+    height: 20px;
+    border: solid black 3px;
+    border-radius: 4px;
+}
+
+button{
+    margin: 10px;
+    height: 27px;
+    width: 80px;
+    border: solid black 3px;
+    border-radius: 4px;
+    background: white;
+    transition: 0.3s;
+}
+
+button:hover{
+    transform: scale(1.05);
+    transition: 0.3s;
 }

@@ -1,4 +1,5 @@
 import {PointerLockControls} from "./PointerLockControls";
+import {MOUSE} from "three";
 
 export default class PlayerController {
 
@@ -9,6 +10,8 @@ export default class PlayerController {
         this.left = false;
         this.right = false;
 
+        this.mouseLeft = false;
+
         this.curDim = 1;
 
         this.mouseControls = new PointerLockControls(player, camera, canvas);
@@ -16,7 +19,6 @@ export default class PlayerController {
         canvas.onclick = () => {
             canvas.requestPointerLock();
         }
-
 
         window.addEventListener('keydown', ev => {
 
@@ -65,8 +67,15 @@ export default class PlayerController {
                 case 'e':
                     this.curDim = 2;
             }
-        })
+        });
 
+        canvas.addEventListener('mousedown', (ev) => {
+            if (ev.button === 0) this.mouseLeft = true;
+        });
+
+        canvas.addEventListener('mouseup', (ev) => {
+            if (ev.button === 0) this.mouseLeft = false;
+        });
 
     }
 

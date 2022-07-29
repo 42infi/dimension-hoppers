@@ -133,7 +133,7 @@ class PointerLockControls extends EventDispatcher {
 
         };
 
-        //TODO: reset velocity on collide without breaking smth
+        //TODO: reset velocity on collide without breaking smth (semi fixed by high slowdown rate)
         this.scaledCollision = (_vector, distance, collisions) => {
             let sv = new Vector3().addScaledVector(_vector, distance);
 
