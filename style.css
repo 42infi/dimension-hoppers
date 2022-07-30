@@ -6,7 +6,7 @@ body {
 
 }
 
-#backgroundimg{
+#backgroundImg{
     height: 110%;
     filter: blur(3px);
     margin: -10px;
@@ -48,7 +48,7 @@ body {
     transform: translateY(80px);
 }
 
-#linkwrapper{
+#linkWrapper{
     position: absolute;
     top: 50%;
     left: 50%;
@@ -75,4 +75,15 @@ button{
 button:hover{
     transform: scale(1.05);
     transition: 0.3s;
+}
+
+#health{
+    position: absolute;
+    top: 80%;
+    left: 40%;
+    transform: translateX(-50%);
+    font-size: 80px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 3px 3px black;
 }

@@ -1,10 +1,14 @@
 import {
     AmbientLight,
-    BoxGeometry, CameraHelper,
-    Color, DirectionalLight, Group,
-    Mesh, MeshBasicMaterial,
-    MeshLambertMaterial, PCFSoftShadowMap,
-    PerspectiveCamera, PointLight,
+    BoxGeometry,
+    Color,
+    DirectionalLight,
+    Group,
+    Mesh,
+    MeshLambertMaterial,
+    PCFSoftShadowMap,
+    PerspectiveCamera,
+    PointLight,
     Scene,
     sRGBEncoding,
     WebGLRenderer
@@ -25,7 +29,6 @@ function addWall(x, y, z, width, height, depth, color, parent) {
 export default function initWorld() {
 
     const modelLoader = new GLTFLoader();
-
 
 
     const canvas = document.getElementById("gamecanvas");
@@ -71,7 +74,7 @@ export default function initWorld() {
 
         state.weapon = model.scene;
 
-        state.weapon.rotation.y = Math.PI/2
+        state.weapon.rotation.y = Math.PI / 2
         state.weapon.position.x = 3;
         state.weapon.position.y = -6;
 
@@ -80,11 +83,6 @@ export default function initWorld() {
         overlayScene.add(state.weapon)
         state.loaded = true;
     });
-
-
-
-
-
 
 
     const directionalLight = new DirectionalLight('#ffffff', 1);
@@ -185,9 +183,7 @@ export default function initWorld() {
     addWall(0, 0, -12, 10, 3, 4, dim2ObjColor, group2);
 
 
-    scene.add(group2)
+    scene.add(group2);
 
-
-
-    return [canvas, scene, camera, renderer, group1, group2, directionalLight, overlayCamera, overlayScene, state];
+    return [canvas, scene, camera, renderer, group1, group2, overlayCamera, overlayScene, state];
 }

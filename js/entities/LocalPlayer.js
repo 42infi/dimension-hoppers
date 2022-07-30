@@ -1,26 +1,33 @@
 import Entity from "./Entity";
-import {
-    Box3, Color,
-    Raycaster,
-    Vector3
-} from "three";
+import {Box3, Color, Raycaster, Vector3} from "three";
 import PlayerController from "../controllers/PlayerController";
 import Weapon from "../weapons/Weapon";
 
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 export default class LocalPlayer extends Entity {
 
-    constructor(dim1, dim2, scene, camera, canvas) {
+    constructor(dim1, dim2, scene, camera, canvas, socket, playerCount) {
         super();
         this.dim1 = dim1;
         this.dim2 = dim2;
         this.scene = scene;
         this.camera = camera;
+        this.groundRaycaster = new Raycaster();
+        this.socket = socket;
         this.velocity = new Vector3();
         this.stopped = false;
         this.playerController = new PlayerController(this, camera, canvas);
         this.weapon = new Weapon(camera, scene, this.playerController);
-
+        this.spawns = [new Vector3(-20, 10, 0), new Vector3(20, 10, 0)];
+        const spawnVec = this.spawns[playerCount % 2];
+        this.camera.position.set(spawnVec.x, spawnVec.y, spawnVec.z);
+        this.canJump = true;
+        this.lives = 10;
     }
 
     update(detail) {
@@ -45,10 +52,9 @@ export default class LocalPlayer extends Entity {
 
         this.scene.background = this.playerController.curDim === 1 ? new Color('#ff1454') : new Color('#ff9914');
 
-        const groundRaycaster = new Raycaster();
-        groundRaycaster.set(this.camera.position, new Vector3(0, -1, 0));
-        groundRaycaster.far = 4;
-        const intersects = groundRaycaster.intersectObjects(this[`dim${this.playerController.curDim}`].children);
+        this.groundRaycaster.set(this.camera.position, new Vector3(0, -1, 0));
+        this.groundRaycaster.far = 4;
+        const intersects = this.groundRaycaster.intersectObjects(this[`dim${this.playerController.curDim}`].children);
 
         this.onGround = !!intersects[0];
 
@@ -76,7 +82,7 @@ export default class LocalPlayer extends Entity {
 
             let distance = Math.sqrt(Math.pow(relX, 2) + Math.pow(relY, 2) + Math.pow(relZ, 2));
 
-            if (distance < 0.3) {
+            if (distance < 0.8) {
                 colVec.add(new Vector3(Math.sign(relX), Math.sign(relY), Math.sign(relZ)));
             }
 
@@ -163,14 +169,29 @@ export default class LocalPlayer extends Entity {
         }
 
         if (this.playerController.mouseLeft) {
-            console.log(this.weapon.shoot());
+            const result = this.weapon.shoot();
+            if (result) {
+                this.socket.send(JSON.stringify(Object.assign({type: "hit"}, result)));
+            }
         }
-
 
     }
 
     jump = () => {
-        if (this.onGround) this.velocity.y += 25;
+        if (this.onGround && this.canJump) this.velocity.y += 27;
+    }
+
+    respawn = () => {
+        const vec = this.spawns[getRandomInt(0, this.spawns.length - 1)];
+        this.camera.position.set(vec.x, vec.y, vec.z);
+        this.health = 100;
+        this.lives--;
+        if (this.lives <= 0) {
+            this.socket.close();
+            alert("you died (you can rejoin)");
+            window.location.href = window.location.origin;
+        }
+
     }
 
 }

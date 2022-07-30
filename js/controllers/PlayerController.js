@@ -1,10 +1,10 @@
 import {PointerLockControls} from "./PointerLockControls";
-import {MOUSE} from "three";
 
 export default class PlayerController {
 
     constructor(player, camera, canvas) {
 
+        this.player = player;
         this.forward = false;
         this.backward = false;
         this.left = false;
@@ -23,6 +23,10 @@ export default class PlayerController {
         window.addEventListener('keydown', ev => {
 
             switch (ev.key) {
+                case ' ':
+                    player.jump();
+                    player.canJump = false;
+                    break;
                 case 'w':
                     this.forward = true;
                     break;
@@ -41,6 +45,9 @@ export default class PlayerController {
         window.addEventListener('keyup', ev => {
 
             switch (ev.key) {
+                case ' ':
+                    player.canJump = true;
+                    break;
                 case 'w':
                     this.forward = false;
                     break;
@@ -58,14 +65,13 @@ export default class PlayerController {
 
         window.addEventListener('keypress', ev => {
             switch (ev.key) {
-                case ' ':
-                    player.jump();
-                    break;
                 case 'q':
                     this.curDim = 1;
+                    this.player.socket.send(JSON.stringify({type: "dimSwap", dim: 1}));
                     break;
                 case 'e':
                     this.curDim = 2;
+                    this.player.socket.send(JSON.stringify({type: "dimSwap", dim: 2}));
             }
         });
 

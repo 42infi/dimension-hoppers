@@ -10,7 +10,6 @@ export default class WorldObj {
 
     }
 
-
     updateEvent = e => this.update(e.detail);
 
     update(detail) {
@@ -18,10 +17,6 @@ export default class WorldObj {
             this.model.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z);
             this.model.position.set(this.position.x, this.position.y, this.position.z);
         }
-    }
-
-    destructor = () => {
-        removeEventListener('update', this.updateEvent);
     }
 
 

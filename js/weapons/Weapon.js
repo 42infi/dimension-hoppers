@@ -1,4 +1,4 @@
-import {Raycaster, Vector2, Vector3} from "three";
+import {Raycaster} from "three";
 
 export default class Weapon {
 
@@ -21,14 +21,14 @@ export default class Weapon {
 
             for (let i = 0; i < intersects.length; i++) {
                 if (intersects[i].object.material.wireframe) continue;
-
-                switch (intersects[i].object.name) {
+                const split = intersects[i].object.name.split('#');
+                switch (split[0]) {
                     case '':
                         return;
                     case 'Head':
-                        return "Head";
+                        return {part: 1, playerId: split[1]};
                     case 'Body':
-                        return "Body";
+                        return {part: 2, playerId: split[1]};
                 }
 
             }

@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Menu</title>
     <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
 
-<img id="backgroundimg" src="./img/background.png" alt="">
+<img id="backgroundImg" src="./img/background.png" alt="">
 
 <div class="heading">DIMENSION</div>
 <div class="heading shift">HOPPERS</div>
 
-<div id="linkwrapper">
+<div id="linkWrapper">
     <label>
-        <input type="text" placeholder="ip:port">
+        <input id="ipField" type="text" placeholder="server/room ip:port">
     </label>
-    <button>Join</button>
+    <button onclick="window.location.href=`${window.location.origin}/game.html?ip=${document.getElementById('ipField').value}`">Join</button>
 </div>
 
 </body>

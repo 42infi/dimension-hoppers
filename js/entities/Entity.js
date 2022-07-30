@@ -8,8 +8,4 @@ export default class Entity extends WorldObj {
         this.onGround = false;
     }
 
-    isAlive = () => {
-        return this.health > 0;
-    }
-
 }
