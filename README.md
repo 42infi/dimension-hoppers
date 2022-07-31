@@ -1,4 +1,6 @@
-# dimension-hoppers
+# Dimension Hoppers
+
+![img](https://cdn.discordapp.com/attachments/738010330780926004/1003323405866651738/Screenshot_1.png)
 
 my result of a 8 days game jam with 3 other friends
 
