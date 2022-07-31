@@ -166,9 +166,11 @@ function connect() {
         }
 
         if (type === 'damage') {
-            localPlayer.health -= incomingJson.damage;
-            if (localPlayer.health <= 0) localPlayer.respawn();
-            healthElem.innerText = localPlayer.health;
+            if (!localPlayer.spawnProtected()) {
+                localPlayer.health -= incomingJson.damage;
+                if (localPlayer.health <= 0) localPlayer.respawn();
+                healthElem.innerText = localPlayer.health;
+            }
         }
 
     };

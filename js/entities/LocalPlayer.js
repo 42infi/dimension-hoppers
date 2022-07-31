@@ -23,11 +23,21 @@ export default class LocalPlayer extends Entity {
         this.stopped = false;
         this.playerController = new PlayerController(this, camera, canvas);
         this.weapon = new Weapon(camera, scene, this.playerController);
-        this.spawns = [new Vector3(-20, 10, 0), new Vector3(20, 10, 0)];
+        this.spawns = [
+            new Vector3(-19, 4, 2),
+            new Vector3(19, 4, -2),
+            new Vector3(-17, 4, -19),
+            new Vector3(-19, 4, 21),
+            new Vector3(16, 4, 20),
+            new Vector3(20, 4, -20),
+            new Vector3(6, 4, -19),
+            new Vector3(6, 4, -19)
+        ];
         const spawnVec = this.spawns[playerCount % 2];
         this.camera.position.set(spawnVec.x, spawnVec.y, spawnVec.z);
         this.canJump = true;
         this.lives = 10;
+        this.respawnTime = Date.now();
     }
 
     update(detail) {
@@ -191,7 +201,9 @@ export default class LocalPlayer extends Entity {
             alert("you died (you can rejoin)");
             window.location.href = window.location.origin;
         }
-
+        this.respawnTime = Date.now();
     }
+
+    spawnProtected = () => Date.now() - this.respawnTime < 1200;
 
 }

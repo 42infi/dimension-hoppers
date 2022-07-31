@@ -28,10 +28,6 @@ export default class Player extends Entity {
         scene.add(this.model);
     }
 
-    swapDim = () => {
-
-    }
-
     destructor() {
         this.scene.remove(this.model);
     }
